@@ -9,6 +9,19 @@ angular.module('myApp.signin', ['ngRoute'])
   });
 }])
 
-.controller('SignInCtrl', [function() {
+.controller('SignInCtrl', ['$scope', '$location', function($scope, $location) {
+    $scope.connect = function() {
+        SC.initialize({
+          client_id: '8a810189684f0d6deeac1e75cbeabed6',
+          redirect_uri: 'http://localhost:8000/app/callback.html'
+        });
 
+        // initiate auth popup
+        SC.connect(function() {
+          // SC.get('/me', function(me) {
+          //   //alert('Hello, ' + me.username);
+          // });
+            $scope.$apply(function() { $location.path("/play"); });
+        });
+    }
 }]);

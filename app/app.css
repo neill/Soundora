@@ -1,30 +1,166 @@
 /* app css stylesheet */
 
+html, body {
+  height: 100%;
+}
+
+/* Header Menu CSS */
 .menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
+  background-color: #343d46;
+  color: #fff;
+  height: 70px;
 }
 
-.menu:before {
-  content: "[";
+.menu .block {
+  height: inherit;
+  width: inherit;
+  float: left;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 70px;
+  margin-right: 15px;
 }
 
-.menu:after {
-  content: "]";
+.menu .search-block {
+  width: 400px;
+  white-space: nowrap;
+  position: relative;
 }
 
-.menu > li {
-  display: inline;
+.menu #search {
+  height: 30px;
+  width: 400px;
+  background-color: #2b303b;
+  border: none;
+  font-size: 10pt;
+  color: #63717f;
+  padding-left: 45px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-transition: background .55s ease;
+  -moz-transition: background .55s ease;
+  -ms-transition: background .55s ease;
+  -o-transition: background .55s ease;
+  transition: background .55s ease;
 }
 
-.menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
+.icon{
+  position: absolute;
+  margin-left: 17px;
+  margin-top: 2px;
+  z-index: 1;
+  color: #4f5b66;
 }
 
-.menu > li:nth-child(1):before {
-  content: "";
+.menu input#search::-webkit-input-placeholder {
+   color: #65737e;
+}
+.menu input#search:-moz-placeholder { /* Firefox 18- */
+   color: #65737e;
+}
+.menu input#search::-moz-placeholder {  /* Firefox 19+ */
+   color: #65737e;
+}
+.menu input#search:-ms-input-placeholder {
+   color: #65737e;
+}
+.menu input#search:hover, .menu input#search:focus, .menu input#search:active{
+    outline:none;
+    background: #ffffff;
+  }
+
+.menu #disconnect {
+  float: right;
+}
+
+.usr_img {
+  margin-left: 15px;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+}
+
+/* Main Content CSS */
+.main {
+  margin: 0;
   padding: 0;
+  border: 0;
+  min-height: 100%;
+  height: 100%;
+}
+
+.main .playlist {
+  width: 285px;
+  height: 100%;
+  min-height: 100%;
+  float: left;
+  padding-right: 15px;
+}
+
+.playlist h1 {
+  margin-left: 15px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  border: 0;
+}
+
+.playlist ul {
+  list-style-type: none;
+  padding: 5px;
+  margin: 5px 0px 5px 5px;
+}
+
+.playlist li {
+  margin-bottom: 5px;
+}
+
+.main .player {
+  height: 100%;
+  min-height: 100%;
+  width: 250px;
+  float: left;
+  overflow: auto;
+  padding-bottom: 50px;
+}
+
+.player .foot {
+  bottom: 0%;
+  position: absolute;
+}
+
+.player .footimg {
+  margin-left: 73px;
+  margin-right: 73px;
+  margin-bottom: 10px;
+}
+
+.player h1 {
+  margin-top: 10px;
+  text-align: center;
+  margin-bottom: 5px;
+  border: 0;
+}
+
+.player .album-art{
+  width: 250px;
+  height: 250px;
+}
+
+.player .options {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+}
+
+.options a {
+  color: #000;
+  text-decoration: none;
+}
+.options i {
+  display: inline-block;
+  width: 35px;
 }

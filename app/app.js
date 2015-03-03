@@ -4,10 +4,11 @@
 angular.module('myApp', [
   'ngRoute',
   'myApp.playview',
+  'myApp.signin',
   'myApp.view1',
   'myApp.view2',
   'myApp.version'
 ]).
 config(['$routeProvider', function($routeProvider) {
-  $routeProvider.otherwise({redirectTo: '/play'});
+  $routeProvider.otherwise({redirectTo: '/sign-in'});
 }]);

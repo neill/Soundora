@@ -9,7 +9,7 @@ angular.module('myApp.signin', ['ngRoute'])
   });
 }])
 
-.controller('SignInCtrl', ['$scope', '$location', function($scope, $location) {
+.controller('SignInCtrl', ['$scope', '$cookies', '$cookieStore', '$location', function($scope, $cookies, $cookieStore, $location) {
     $scope.connect = function() {
         SC.initialize({
           client_id: '8a810189684f0d6deeac1e75cbeabed6',
@@ -18,10 +18,10 @@ angular.module('myApp.signin', ['ngRoute'])
 
         // initiate auth popup
         SC.connect(function() {
-          // SC.get('/me', function(me) {
-          //   //alert('Hello, ' + me.username);
-          // });
-            $scope.$apply(function() { $location.path("/play"); });
+          var accessToken = SC.accessToken();
+          $cookies['soundoraCookie'] = accessToken
+          // $cookieStore.put('soundoraCookie', accessToken);
+          $scope.$apply(function() { $location.path("/play"); });
         });
     }
 }]);

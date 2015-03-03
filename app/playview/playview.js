@@ -9,29 +9,55 @@ angular.module('myApp.playview', ['ngRoute'])
   });
 }])
 
-.controller('PlayViewCtrl', ['$scope', '$cookies', function($scope, $cookies) {
+.controller('PlayViewCtrl', ['$scope', '$cookies', '$http', '$location', function($scope, $cookies, $http, $location) {
+
+    $scope.disconnect = function() {
+        delete $cookies["soundoraCookie"];
+        $location.path("/sign-in");
+    };
+
+  var accessToken = $cookies['soundoraCookie']
+  var clientId = '8a810189684f0d6deeac1e75cbeabed6'
 
   SC.initialize({
-    client_id: '8a810189684f0d6deeac1e75cbeabed6',
+    client_id: clientId,
     client_secret: '4418d9cea79b0804f69fa817d434bf72',
     redirect_uri: 'http://localhost:8000/app/callback.html',
-    access_token: $cookies['soundoraCookie'],
+    access_token: accessToken,
     scope: 'non-expiring'
   });
 
-  console.log($cookies['soundoraCookie'])
+  console.log(accessToken)
 
-  var user = {};
+  function getUser() {
+    $http({
+        method: 'GET',
+        url: 'https://api.soundcloud.com/me.json?oauth_token=' + accessToken
+    }).
+    success(function(data) {
+        $scope.name = data.username
+    });
+  }
 
-  SC.get('/me.json?oauth_token=1-119281-6909133-e8bc21e59fd8ec6', function(data) {
-    console.log("Data:")
-    console.log(data)
-    user = data
-  });
+  function getTrack() {
+    $http({
+        method: 'GET',
+        url: 'http://api.soundcloud.com/tracks/190984415.json?client_id=' + clientId
+    }).
+    success(function(data) {
+        $scope.trackname = data.title;
+        $scope.artist = data.user.username;
+        $scope.artwork = data.artwork_url;
+    })
+  }
 
-  console.log("User:")
-  console.log(user);
+  getUser();
+  getTrack();
+  // var user = {};
 
-  $scope.name = "Neill"
+  // SC.get('/me.json?oauth_token=' + accessToken, function(data) {
+  //   user = data
+  // });
+
+  // $scope.name = "Neill"
 }]);
-

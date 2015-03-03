@@ -208,8 +208,35 @@ html, body {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 5px;
+  margin-top: 15px;
 }
+
+.player .song-info {
+  width: 250px;
+  margin-top: 0px;
+  text-align: center;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.song-info ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.song-info #track-name {
+  font-weight: bold;
+}
+
+.song-info h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.song-info #track-artist {
+
+}
+
 
 .options a {
   color: #000;
@@ -217,5 +244,5 @@ html, body {
 }
 .options i {
   display: inline-block;
-  width: 35px;
+  width: 40px;
 }

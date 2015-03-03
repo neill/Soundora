@@ -5,16 +5,22 @@
         <span class="icon"><i class="fa fa-search"></i></span>
         <input type="search" id="search" placeholder="Search for an Artist..." name="search">
     </div>
-    <div class="block" id="disconnect"><a href="#"><img src="assets/btn-disconnect.png"></a></div>
+    <div class="block" id="disconnect"><img src="assets/btn-disconnect.png" ng-click="disconnect()"></div>
 </section>
 <section class="main">
     <div class="player">
-        <img src="assets/18-months.png" class="album-art"><br>
+        <img src="{{artwork}}" class="album-art"><br>
         <div class="options">
             <a href="#"><i class="fa fa-thumbs-down fa-flip-horizontal fa-2x"></i></a>
             <a href="#"><i class="fa fa-thumbs-up fa-2x"></i></a>
             <a href="#"><i class="fa fa-play fa-2x"></i></a> <!-- FOR LATER <i class="fa fa-pause fa-2x"></i> -->
             <a href="#"><i class="fa fa-forward fa-2x"></i></a>
+        </div>
+        <div class="song-info">
+            <ul>
+                <li id="track-name"><h3>{{trackname}}</h3></li>
+                <li id="track-artist">by {{artist}}</li>
+            </ul>
         </div>
 
         <div class="foot">

@@ -44,13 +44,29 @@ angular.module('myApp.playview', ['ngRoute'])
     });
   }
 
-  function getTrack() {
+  function generateNext() {
     $http({
         method: 'GET',
-        url: 'http://api.soundcloud.com/tracks/190984415.json?client_id=' + clientId
+        url: 'https://api.soundcloud.com/tracks?genres=' + $scope.genre + '&client_id=' + clientId
     }).
     success(function(data) {
-        $scope.trackUrl = data.uri
+        $scope.nextSong = data[Math.floor(Math.random()*data.length)];
+    });
+
+    setTimeout(function() {
+        console.log($scope.nextSong.uri)
+    }, 2000);
+  }
+
+  function getTrack(nextTrackUrl) {
+    $http({
+        method: 'GET',
+        url: nextTrackUrl + '.json?client_id=' + clientId
+    }).
+    success(function(data) {
+        $scope.trackUrl = data.uri;
+        $scope.trackId = data.id;
+        $scope.genre = data.genre;
         $scope.trackShareUrl = data.permalink_url;
         $scope.trackName = data.title;
         $scope.artist = data.user.username;
@@ -59,6 +75,7 @@ angular.module('myApp.playview', ['ngRoute'])
         $scope.wave = data.waveform_url;
         $scope.stream = data.stream_url + '?client_id=' + clientId;
         $scope.song = new Audio();
+        $scope.song.addEventListener('ended', function() { getTrack($scope.nextSong.uri) });
     });
     $scope.playing = false;
     $scope.play = function() {
@@ -73,17 +90,33 @@ angular.module('myApp.playview', ['ngRoute'])
         }
     }
 
-    $scope.startStream = function() {
-        $scope.playing = !$scope.playing;
+    setTimeout(function() {
         $scope.song.src = $scope.stream;
         $scope.song.play();
+        console.log("Song loaded... Play!")
+    }, 1000);
+
+    $scope.skipSong = function() {
+        if (!$scope.playing) {
+            $scope.song.pause()
+            $scope.playing = false;
+            generateNext();
+            getTrack($scope.nextSong.uri);
+        };
     }
 
+    function thumbsUp() {
+
+    }
+
+    function thumbsDown() {
+
+    }
   }
 
   getUser();
-  getTrack();
-
+  getTrack('http://api.soundcloud.com/tracks/190984415');
+  generateNext();
   // SC.whenStreamingReady(function() {
   //   SC.stream("/tracks/190984415", function(sound) {
   //       sound.play();

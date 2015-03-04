@@ -11,10 +11,10 @@
     <div class="player">
         <img src="{{artwork}}" class="album-art"><br>
         <div class="options">
-            <a href="#"><i class="fa fa-thumbs-down fa-flip-horizontal fa-2x"></i></a>
-            <a href="#"><i class="fa fa-thumbs-up fa-2x"></i></a>
-            <i class="fa fa-play fa-2x" ng-click="play()" ng-class="{'fa fa-play fa-2x': !playing, 'fa fa-pause fa-2x': playing}"></i>
-            <a href="#"><i class="fa fa-forward fa-2x"></i></a>
+            <i class="fa fa-thumbs-down fa-flip-horizontal fa-2x"></i>
+            <i class="fa fa-thumbs-up fa-2x"></i>
+            <i class="fa fa-pause fa-2x" ng-click="play()" ng-class="{'fa fa-play fa-2x': !playing, 'fa fa-pause fa-2x': playing}"></i>
+            <i class="fa fa-forward fa-2x" ng-click="skipSong()"></i>
         </div>
         <div class="song-info">
             <ul>
@@ -24,7 +24,8 @@
         </div>
 
         <div class="foot">
-            <img src="assets/powered-by.png" class="footimg">
+            <a href="http://soundcloud.com"><img src="assets/powered-by.png" class="footimg"></a>
+            <a href="https://www.github.com/neill/soundora"><img src="assets/github.png" class="github"></a>
         </div>
     </div>
     <div class="playlist"><h1>Playlist</h1>

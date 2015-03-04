@@ -50,7 +50,8 @@ angular.module('myApp.playview', ['ngRoute'])
         url: 'http://api.soundcloud.com/tracks/190984415.json?client_id=' + clientId
     }).
     success(function(data) {
-        $scope.trackname = data.title;
+        $scope.trackUrl = data.uri
+        $scope.trackName = data.title;
         $scope.artist = data.user.username;
         $scope.artwork = data.artwork_url.replace("large", "t500x500");
     })
@@ -58,11 +59,11 @@ angular.module('myApp.playview', ['ngRoute'])
 
   getUser();
   getTrack();
-  // var user = {};
 
-  // SC.get('/me.json?oauth_token=' + accessToken, function(data) {
-  //   user = data
-  // });
+  SC.whenStreamingReady(function() {
+    SC.stream("/tracks/190984415", function(sound) {
+        sound.play();
+    });
+  });
 
-  // $scope.name = "Neill"
 }]);

@@ -11,13 +11,17 @@ angular.module('myApp.playview', ['ngRoute'])
 
 .controller('PlayViewCtrl', ['$scope', '$cookies', '$http', '$location', function($scope, $cookies, $http, $location) {
 
-    $scope.disconnect = function() {
-        delete $cookies["soundoraCookie"];
-        $location.path("/sign-in");
-    };
-
   var accessToken = $cookies['soundoraCookie']
   var clientId = '8a810189684f0d6deeac1e75cbeabed6'
+
+  if (accessToken == null) {
+    $location.path("/sign-in");
+  };
+
+  $scope.disconnect = function() {
+    delete $cookies["soundoraCookie"];
+    $location.path("/sign-in");
+  };
 
   SC.initialize({
     client_id: clientId,
@@ -36,6 +40,7 @@ angular.module('myApp.playview', ['ngRoute'])
     }).
     success(function(data) {
         $scope.name = data.username
+        $scope.user_img = data.avatar_url
     });
   }
 
@@ -47,7 +52,7 @@ angular.module('myApp.playview', ['ngRoute'])
     success(function(data) {
         $scope.trackname = data.title;
         $scope.artist = data.user.username;
-        $scope.artwork = data.artwork_url;
+        $scope.artwork = data.artwork_url.replace("large", "t500x500");
     })
   }
 

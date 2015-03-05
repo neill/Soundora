@@ -9,7 +9,7 @@ angular.module('myApp.playview', ['ngRoute'])
   });
 }])
 
-.controller('PlayViewCtrl', ['$scope', '$cookies', '$http', '$location', 'userService', function($scope, $cookies, $http, $location, userService) {
+.controller('PlayViewCtrl', ['$scope', '$cookies', '$http', '$location', 'userService', 'AsyncQueue', function($scope, $cookies, $http, $location, userService, AsyncQueue) {
 
   // Initialize app with data.
   var accessToken = $cookies.soundoraCookie;
@@ -47,6 +47,21 @@ angular.module('myApp.playview', ['ngRoute'])
           }
           $scope.song.play();
       }
+  };
+
+  // Search for users. Thanks to (http://blog.itcrowd.pl/2014/04/queueing-service-for-angularjs.html) for asyncQueue.js!
+  $scope.results = [];
+
+  function doRefresh() {
+    return $http.get('https://api.soundcloud.com/users.json?client_id=' + clientId + '&q=' + $scope.searchQuery)
+    .then(function(data) {
+      $scope.results = data;
+      console.log(data)
+    });
+  };
+
+  $scope.refresh = function () {
+    AsyncQueue.add(doRefresh, {timeout: 1000});
   };
 
   // Get User from userService
@@ -92,7 +107,7 @@ angular.module('myApp.playview', ['ngRoute'])
     .then(function(data) {
       $scope.nextSong = data[Math.floor(Math.random()*data.length)];
       console.log($scope.nextSong.title + " is playing NEXT!")
-      console.log($scope.nextSong.genre)
+      console.log("Next song's genre is: " + $scope.nextSong.genre)
     }, function(error) {
       console.log("Error generating next track.");
     });

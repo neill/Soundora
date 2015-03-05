@@ -6,6 +6,7 @@ angular.module('myApp', [
   'ngCookies',
   'myApp.playview',
   'myApp.services',
+  'itcrowd.services',
   'myApp.signin',
   'myApp.version'
 ]).

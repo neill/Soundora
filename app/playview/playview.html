@@ -3,7 +3,7 @@
     <div class="block name">Hey, {{name}}</div>
     <div class="block search-block">
         <span class="icon"><i class="fa fa-search"></i></span>
-        <input type="search" id="search" placeholder="Create Station..." name="search">
+        <input type="search" id="search" placeholder="Create Station..." name="search" ng-change="refresh()" ng-model="searchQuery">
     </div>
     <div class="block" id="disconnect"><img src="assets/btn-disconnect.png" ng-click="disconnect()"></div>
 </section>
@@ -30,7 +30,8 @@
         </div>
     </div>
     <div class="playlist"><h1>Welcome to Soundora</h1>
-        <p>Find new music through Soundcloud! Just use the search bar above to create a station, leave Soundora running in the background, and enjoy! As tracks finish, you will find them listed here.</p>
+        <p>Find new music through Soundcloud! Use the search bar above to find an artist on Soundcloud and create your station, leave Soundora running in the background, and enjoy! As tracks finish, you will find them listed here.</p>
         <p>Soundora is built using the Soundcloud API and AngularJS. Feel free to add a pull request with new features to the GitHub repo, or e-mail me at <a href="mailto:neillnsilva@gmail.com">neillnsilva@gmail.com</a> with any comments.</p>
+        <ul><li ng-repeat="result in results | filter:search"></li></ul>
     </div>
 </section>

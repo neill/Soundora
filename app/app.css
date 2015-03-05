@@ -181,6 +181,19 @@ html, body {
   overflow: hidden;
 }
 
+#progress-bar {
+  border: 1px solid #aaa;
+  color: #f4f4f4;
+  width: 250px;
+  height: 5px;
+}
+
+#progress {
+  background-color: #343d46;
+  height: 5px;
+  display: block;
+}
+
 .player .foot {
   padding-top: 10px;
 }

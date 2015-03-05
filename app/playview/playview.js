@@ -14,12 +14,9 @@ angular.module('myApp.playview', ['ngRoute'])
   var accessToken = $cookies['soundoraCookie']
   var clientId = '8a810189684f0d6deeac1e75cbeabed6'
 
-  if (accessToken == null) {
-    $location.path("/sign-in");
-  };
+  console.log(accessToken)
 
-  $scope.disconnect = function() {
-    delete $cookies["soundoraCookie"];
+  if (accessToken == null) {
     $location.path("/sign-in");
   };
 
@@ -31,7 +28,10 @@ angular.module('myApp.playview', ['ngRoute'])
     scope: 'non-expiring'
   });
 
-  console.log(accessToken)
+  $scope.disconnect = function() {
+    delete $cookies["soundoraCookie"];
+    $location.path("/sign-in");
+  };
 
   function getUser() {
     $http({
@@ -76,6 +76,7 @@ angular.module('myApp.playview', ['ngRoute'])
         $scope.stream = data.stream_url + '?client_id=' + clientId;
         $scope.song = new Audio();
         $scope.song.addEventListener('ended', function() { getTrack($scope.nextSong.uri) });
+        $scope.song.addEventListener('timeupdate', updateProgress, false);
     });
     $scope.playing = false;
     $scope.play = function() {
@@ -88,6 +89,15 @@ angular.module('myApp.playview', ['ngRoute'])
             }
             $scope.song.play();
         }
+    }
+
+    function updateProgress() {
+      var progress = document.getElementById("progress");
+      var value = 0;
+      if ($scope.song.currentTime > 0) {
+        value = Math.floor((100 / $scope.song.duration) * $scope.song.currentTime);
+      }
+      progress.style.width = value + "%";
     }
 
     setTimeout(function() {

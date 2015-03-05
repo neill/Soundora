@@ -37,7 +37,6 @@ angular.module('myApp.playview', ['ngRoute'])
   };
 
   // Logic for play/pause features.
-  $scope.playing = false;
   $scope.play = function() {
       $scope.playing = !$scope.playing;
       if (!$scope.playing) {
@@ -65,6 +64,7 @@ angular.module('myApp.playview', ['ngRoute'])
   var getTrack = function(trackUrl, clientId) {
     userService.getTrack(trackUrl, clientId)
     .then(function(data) {
+      $scope.playing = true;
       $scope.trackUrl = data.uri;
       $scope.trackId = data.id;
       $scope.genre = data.genre;
@@ -76,8 +76,12 @@ angular.module('myApp.playview', ['ngRoute'])
       $scope.wave = data.waveform_url;
       $scope.stream = data.stream_url + '?client_id=' + clientId;
       $scope.song = new Audio();
+      $scope.song.src = $scope.stream;
+      $scope.song.autoplay = true;
       $scope.song.addEventListener('timeupdate', updateProgress, false);
-      $scope.song.addEventListener('ended', function() { getTrack($scope.nextSong.uri); });
+      $scope.song.addEventListener('ended', function() { getTrack($scope.nextSong.uri, clientId); });
+      console.log("Now playing " + data.title);
+      $scope.song.addEventListener("load", function() { $scope.song.play(); }, true);
     }, function(error) {
       console.log("Error getting track.");
     });
@@ -87,7 +91,8 @@ angular.module('myApp.playview', ['ngRoute'])
     userService.generateNext(genre, clientId)
     .then(function(data) {
       $scope.nextSong = data[Math.floor(Math.random()*data.length)];
-      console.log($scope.nextSong.uri + " is playing next!");
+      console.log($scope.nextSong.title + " is playing NEXT!")
+      console.log($scope.nextSong.genre)
     }, function(error) {
       console.log("Error generating next track.");
     });
@@ -102,19 +107,20 @@ angular.module('myApp.playview', ['ngRoute'])
     progress.style.width = value + "%";
   }
 
-  setTimeout(function() {
-      $scope.song.src = $scope.stream;
-      $scope.song.play();
-      console.log("Song loaded... Play!");
-  }, 1000);
+  // setTimeout(function() {
+  //     $scope.song.src = $scope.stream;
+  //     $scope.song.play();
+  //     $scope.playing = true;
+  //     console.log("Song loaded... Play!");
+  // }, 1000);
 
   $scope.skipSong = function() {
-      if (!$scope.playing) {
-          $scope.song.pause();
-          $scope.playing = false;
-          generateNext();
-          getTrack($scope.nextSong.uri);
-      }
+    if ($scope.playing) {
+      $scope.song.pause();
+      $scope.playing = !$scope.playing;
+    }
+    generateNext($scope.genre, clientId);
+    getTrack($scope.nextSong.uri, clientId);
   };
 
   function thumbsUp() {
@@ -126,6 +132,6 @@ angular.module('myApp.playview', ['ngRoute'])
   }
 
   getUser(accessToken);
-  getTrack('http://api.soundcloud.com/tracks/190984415', clientId);
   generateNext($scope.genre, clientId);
+  getTrack('http://api.soundcloud.com/tracks/190984415', clientId);
 }]);

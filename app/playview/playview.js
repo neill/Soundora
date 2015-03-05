@@ -55,8 +55,8 @@ angular.module('myApp.playview', ['ngRoute'])
   function doRefresh() {
     return $http.get('https://api.soundcloud.com/users.json?client_id=' + clientId + '&q=' + $scope.searchQuery)
     .then(function(data) {
-      $scope.results = data;
-      console.log(data)
+      $scope.results = data.data;
+      console.log($scope.results)
     });
   };
 

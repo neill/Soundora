@@ -3,8 +3,9 @@
     <div class="block name">Hey, {{name}}</div>
     <div class="block search-block">
         <span class="icon"><i class="fa fa-search"></i></span>
-        <input type="search" id="search" placeholder="Create Station..." name="search" ng-change="refresh()" ng-model="searchQuery">
+        <input type="search" id="search" placeholder="Search Soundcloud artists..." name="search" ng-change="refresh()" ng-model="searchQuery">
     </div>
+            <ul class="results" ng-hide="!searchQuery.length"><li ng-repeat="result in results">{{result.username}}</li></ul>
     <div class="block" id="disconnect"><img src="assets/btn-disconnect.png" ng-click="disconnect()"></div>
 </section>
 <section class="main">

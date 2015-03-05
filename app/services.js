@@ -40,19 +40,6 @@ angular.module('myApp.services', [])
                 }, function(response) {
                     return $q.reject(response.data);
                 });
-            },
-
-            searchUsers: function(searchQuery, clientId) {
-                return $http.get('https://api.soundcloud.com/users.json?client_id=' + clientId + '&q=' + searchQuery)
-                .then(function(response) {
-                    if (typeof response.data === 'object') {
-                        return response.data;
-                    } else {
-                        return $q.reject(response.data);
-                    }
-                }, function(response) {
-                    return $q.reject(response.data);
-                });
             }
         }
     });

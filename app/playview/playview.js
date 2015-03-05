@@ -9,7 +9,7 @@ angular.module('myApp.playview', ['ngRoute'])
   });
 }])
 
-.controller('PlayViewCtrl', ['$scope', '$cookies', '$http', '$location', function($scope, $cookies, $http, $location) {
+.controller('PlayViewCtrl', ['$scope', '$cookies', '$http', '$location', 'userService', function($scope, $cookies, $http, $location, userService) {
 
   var accessToken = $cookies['soundoraCookie']
   var clientId = '8a810189684f0d6deeac1e75cbeabed6'
@@ -33,15 +33,34 @@ angular.module('myApp.playview', ['ngRoute'])
     $location.path("/sign-in");
   };
 
-  function getUser() {
-    $http({
-        method: 'GET',
-        url: 'https://api.soundcloud.com/me.json?oauth_token=' + accessToken
-    }).
-    success(function(data) {
-        $scope.name = data.username
-        $scope.user_img = data.avatar_url
+  var getUser = function() {
+    userService.getUser(accessToken)
+    .then(function(data) {
+      $scope.name = data.username;
+      $scope.user_img = data.avatar_url;
+    }, function(error) {
+      console.log("Error getting user.");
     });
+  }
+
+
+
+
+  // function getUser() {
+  //   $http({
+  //       method: 'GET',
+  //       url: 'https://api.soundcloud.com/me.json?oauth_token=' + accessToken
+  //   }).
+  //   success(function(data) {
+  //       $scope.name = data.username
+  //       $scope.user_img = data.avatar_url
+  //   });
+  // }
+
+  function setUser() {
+    $p.getData().then(function(promise) {
+      console.log(promise);
+    })
   }
 
   function generateNext() {

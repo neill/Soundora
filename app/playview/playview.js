@@ -11,14 +11,16 @@ angular.module('myApp.playview', ['ngRoute'])
 
 .controller('PlayViewCtrl', ['$scope', '$cookies', '$http', '$location', 'userService', function($scope, $cookies, $http, $location, userService) {
 
-  var accessToken = $cookies['soundoraCookie']
-  var clientId = '8a810189684f0d6deeac1e75cbeabed6'
+  // Initialize app with data.
+  var accessToken = $cookies.soundoraCookie;
+  var clientId = '8a810189684f0d6deeac1e75cbeabed6';
 
-  console.log(accessToken)
+  console.log(accessToken);
 
-  if (accessToken == null) {
+  // Basic check if user logged in. If not, send to sign-in page.
+  if (accessToken === null) {
     $location.path("/sign-in");
-  };
+  }
 
   SC.initialize({
     client_id: clientId,
@@ -28,12 +30,28 @@ angular.module('myApp.playview', ['ngRoute'])
     scope: 'non-expiring'
   });
 
+  // Disconnect Button
   $scope.disconnect = function() {
-    delete $cookies["soundoraCookie"];
+    delete $cookies.soundoraCookie;
     $location.path("/sign-in");
   };
 
-  var getUser = function() {
+  // Logic for play/pause features.
+  $scope.playing = false;
+  $scope.play = function() {
+      $scope.playing = !$scope.playing;
+      if (!$scope.playing) {
+          $scope.song.pause();
+      } else {
+          if ($scope.song.src === '') {
+              $scope.song.src = $scope.stream;
+          }
+          $scope.song.play();
+      }
+  };
+
+  // Get User from userService
+  var getUser = function(accessToken) {
     userService.getUser(accessToken)
     .then(function(data) {
       $scope.name = data.username;
@@ -41,115 +59,73 @@ angular.module('myApp.playview', ['ngRoute'])
     }, function(error) {
       console.log("Error getting user.");
     });
-  }
+  };
 
-
-
-
-  // function getUser() {
-  //   $http({
-  //       method: 'GET',
-  //       url: 'https://api.soundcloud.com/me.json?oauth_token=' + accessToken
-  //   }).
-  //   success(function(data) {
-  //       $scope.name = data.username
-  //       $scope.user_img = data.avatar_url
-  //   });
-  // }
-
-  function setUser() {
-    $p.getData().then(function(promise) {
-      console.log(promise);
-    })
-  }
-
-  function generateNext() {
-    $http({
-        method: 'GET',
-        url: 'https://api.soundcloud.com/tracks?genres=' + $scope.genre + '&client_id=' + clientId
-    }).
-    success(function(data) {
-        $scope.nextSong = data[Math.floor(Math.random()*data.length)];
+  // Get track from userService
+  var getTrack = function(trackUrl, clientId) {
+    userService.getTrack(trackUrl, clientId)
+    .then(function(data) {
+      $scope.trackUrl = data.uri;
+      $scope.trackId = data.id;
+      $scope.genre = data.genre;
+      $scope.trackShareUrl = data.permalink_url;
+      $scope.trackName = data.title;
+      $scope.artist = data.user.username;
+      $scope.artistUrl = data.user.permalink_url;
+      $scope.artwork = data.artwork_url.replace("large", "t500x500");
+      $scope.wave = data.waveform_url;
+      $scope.stream = data.stream_url + '?client_id=' + clientId;
+      $scope.song = new Audio();
+      $scope.song.addEventListener('timeupdate', updateProgress, false);
+      $scope.song.addEventListener('ended', function() { getTrack($scope.nextSong.uri); });
+    }, function(error) {
+      console.log("Error getting track.");
     });
+  };
 
-    setTimeout(function() {
-        console.log($scope.nextSong.uri)
-    }, 2000);
-  }
-
-  function getTrack(nextTrackUrl) {
-    $http({
-        method: 'GET',
-        url: nextTrackUrl + '.json?client_id=' + clientId
-    }).
-    success(function(data) {
-        $scope.trackUrl = data.uri;
-        $scope.trackId = data.id;
-        $scope.genre = data.genre;
-        $scope.trackShareUrl = data.permalink_url;
-        $scope.trackName = data.title;
-        $scope.artist = data.user.username;
-        $scope.artistUrl = data.user.permalink_url;
-        $scope.artwork = data.artwork_url.replace("large", "t500x500");
-        $scope.wave = data.waveform_url;
-        $scope.stream = data.stream_url + '?client_id=' + clientId;
-        $scope.song = new Audio();
-        $scope.song.addEventListener('ended', function() { getTrack($scope.nextSong.uri) });
-        $scope.song.addEventListener('timeupdate', updateProgress, false);
+  var generateNext = function(genre, clientId) {
+    userService.generateNext(genre, clientId)
+    .then(function(data) {
+      $scope.nextSong = data[Math.floor(Math.random()*data.length)];
+      console.log($scope.nextSong.uri + " is playing next!");
+    }, function(error) {
+      console.log("Error generating next track.");
     });
-    $scope.playing = false;
-    $scope.play = function() {
-        $scope.playing = !$scope.playing;
-        if (!$scope.playing) {
-            $scope.song.pause();
-        } else {
-            if ($scope.song.src == '') {
-                $scope.song.src = $scope.stream;
-            }
-            $scope.song.play();
-        }
+  };
+
+  function updateProgress() {
+    var progress = document.getElementById("progress");
+    var value = 0;
+    if ($scope.song.currentTime > 0) {
+      value = Math.floor((100 / $scope.song.duration) * $scope.song.currentTime);
     }
+    progress.style.width = value + "%";
+  }
 
-    function updateProgress() {
-      var progress = document.getElementById("progress");
-      var value = 0;
-      if ($scope.song.currentTime > 0) {
-        value = Math.floor((100 / $scope.song.duration) * $scope.song.currentTime);
+  setTimeout(function() {
+      $scope.song.src = $scope.stream;
+      $scope.song.play();
+      console.log("Song loaded... Play!");
+  }, 1000);
+
+  $scope.skipSong = function() {
+      if (!$scope.playing) {
+          $scope.song.pause();
+          $scope.playing = false;
+          generateNext();
+          getTrack($scope.nextSong.uri);
       }
-      progress.style.width = value + "%";
-    }
+  };
 
-    setTimeout(function() {
-        $scope.song.src = $scope.stream;
-        $scope.song.play();
-        console.log("Song loaded... Play!")
-    }, 1000);
+  function thumbsUp() {
 
-    $scope.skipSong = function() {
-        if (!$scope.playing) {
-            $scope.song.pause()
-            $scope.playing = false;
-            generateNext();
-            getTrack($scope.nextSong.uri);
-        };
-    }
-
-    function thumbsUp() {
-
-    }
-
-    function thumbsDown() {
-
-    }
   }
 
-  getUser();
-  getTrack('http://api.soundcloud.com/tracks/190984415');
-  generateNext();
-  // SC.whenStreamingReady(function() {
-  //   SC.stream("/tracks/190984415", function(sound) {
-  //       sound.play();
-  //   });
-  // });
+  function thumbsDown() {
 
+  }
+
+  getUser(accessToken);
+  getTrack('http://api.soundcloud.com/tracks/190984415', clientId);
+  generateNext($scope.genre, clientId);
 }]);

@@ -14,6 +14,32 @@ angular.module('myApp.services', [])
                 }, function(response) {
                     return $q.reject(response.data);
                 });
+            },
+
+            getTrack: function(trackUrl, clientId) {
+                return $http.get(trackUrl + '.json?client_id=' + clientId)
+                .then(function(response) {
+                    if (typeof response.data === 'object') {
+                        return response.data;
+                    } else {
+                        return $q.reject(response.data);
+                    }
+                }, function(response) {
+                    return $q.reject(response.data);
+                });
+            },
+
+            generateNext: function(genre, clientId) {
+                return $http.get('https://api.soundcloud.com/tracks?genres=' + genre + '&client_id=' + clientId)
+                .then(function(response) {
+                    if (typeof response.data === 'object') {
+                        return response.data;
+                    } else {
+                        return $q.reject(response.data);
+                    }
+                }, function(response) {
+                    return $q.reject(response.data);
+                });
             }
-        };
+        }
     });

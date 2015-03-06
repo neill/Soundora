@@ -102,10 +102,12 @@ angular.module('myApp.playview', ['ngRoute'])
       $scope.song.src = $scope.stream;
       $scope.song.autoplay = true;
       $scope.song.addEventListener('timeupdate', updateProgress, false);
+      $scope.song.addEventListener('ended', function() { addPastTrack($scope.artwork, $scope.trackName, $scope.artist); });
       $scope.song.addEventListener('ended', function() { getTrack($scope.nextSong.uri, clientId); });
       console.log("Now playing " + $scope.trackName);
       generateNext($scope.genre, clientId);
       $scope.song.addEventListener("load", function() { $scope.song.play(); }, true);
+      document.getElementById("blur-bg").style.backgroundImage = "url(" + $scope.artwork + ")";
     }, function(error) {
       console.log("Error getting track.");
     });
@@ -133,10 +135,12 @@ angular.module('myApp.playview', ['ngRoute'])
       $scope.song.src = $scope.stream;
       $scope.song.autoplay = true;
       $scope.song.addEventListener('timeupdate', updateProgress, false);
+      $scope.song.addEventListener('ended', function() { addPastTrack($scope.artwork, $scope.trackName, $scope.artist); });
       $scope.song.addEventListener('ended', function() { getTrack($scope.nextSong.uri, clientId); });
       console.log("Now playing " + $scope.trackName);
       generateNext($scope.genre, clientId);
       $scope.song.addEventListener("load", function() { $scope.song.play(); }, true);
+      document.getElementById("blur-bg").style.backgroundImage = "url(" + $scope.artwork + ")";
     }, function(error) {
       console.log("Error getting track.");
     });
@@ -164,12 +168,23 @@ angular.module('myApp.playview', ['ngRoute'])
     progress.style.width = value + "%";
   }
 
+  // Add past-played track to the page with some info.
+  function addPastTrack(image, trackname, artistname) {
+    var mainDiv = document.getElementById('played-tracks');
+    var newDiv = document.createElement("div");
+    newDiv.setAttribute('class', 'past-track');
+    newDiv.innerHTML += "<img src='" + image + "'></img><div class='past-track-name'>" + trackname + "</div><div class='past-track-artist'>" + artistname + "</div>";
+    $('#played-tracks').prepend(newDiv);
+  }
+
+
   // Skip to next song.
   $scope.skipSong = function() {
     if ($scope.playing) {
       $scope.song.pause();
       $scope.playing = !$scope.playing;
     }
+    addPastTrack($scope.artwork, $scope.trackName, $scope.artist);
     generateNext($scope.genre, clientId);
     setTimeout(function() { getTrack($scope.nextSong.uri, clientId); }, 500);
   };
@@ -179,16 +194,18 @@ angular.module('myApp.playview', ['ngRoute'])
     document.getElementById("results-id").style.visibility = "hidden";
     document.getElementById("fullplayer-id").style.visibility = "visible";
     setTrack(userId, clientId);
+    $("#playlist-div").removeClass("playlist-bg");
   };
 
-  function thumbsUp() {
-
+  $scope.thumbsUp = function(trackName, trackId) {
+    console.log("Liked " + trackName + " (" + trackId + ").");
+    $("#thumbsUp").addClass("liked");
+    SC.put('/me/favorites/' + trackId);
   }
 
   function thumbsDown() {
-
+    // For a later date... Where would we store and check this?
   }
 
   getUser(accessToken);
-  // getTrack('http://api.soundcloud.com/tracks/190984415', clientId);
 }]);

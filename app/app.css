@@ -212,6 +212,70 @@ html, body {
   min-height: 100vh;
 }
 
+.background {
+  position: absolute;
+  heigh: 100vh;
+  left: 250px;
+  top: 70px;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  display: block;
+  background-size: cover;
+  margin: -12px;
+  -webkit-filter: blur(10px);
+  -moz-filter: blur(10px);
+  -o-filter: blur(10px);
+  -ms-filter: blur(10px);
+  filter: blur(10px);
+}
+
+#welcome {
+  display: none;
+}
+
+#played-tracks {
+  width: 100%;
+}
+
+.past-track {
+  display: inline;
+  padding-top: 15px;
+  padding-left: 15px;
+  width: 165px;
+  height: 246px;
+  float: left;
+}
+
+.past-track-name {
+  padding-left: 4px;
+  padding-right: 4px;
+  overflow: hidden;
+  width: 157px;
+  height: 46px;
+  max-height: 46px;
+  text-align: left;
+  background-color: #343d46;
+  padding-top: 2px;
+}
+
+.past-track-artist {
+  overflow: hidden;
+  padding-left: 4px;
+  padding-right: 4px;
+  width: 157px;
+  max-height: 35px;
+  text-align: left;
+  background-color: #343d46;
+  font-size: 10pt;
+  font-style: italic;
+}
+
+.past-track img {
+  width: 165px;
+  height: 165px;
+}
+
 .main .playlist {
   top: 70px;
   bottom: 0px;
@@ -220,6 +284,10 @@ html, body {
   min-height: 100vh;
   padding-right: 15px;
   color: #fff;
+  overflow-y: scroll;
+}
+
+.playlist-bg {
   background-image: url("assets/splash.jpg");
   background-size: cover;
 }
@@ -325,6 +393,17 @@ html, body {
   margin-left: auto;
   margin-right: auto;
   margin-top: 15px;
+}
+
+.liked {
+  color: #ffa84c; /* Old browsers */
+  color: -moz-linear-gradient(top,  #ffa84c 0%, #ff7b0d 100%); /* FF3.6+ */
+  color: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffa84c), color-stop(100%,#ff7b0d)); /* Chrome,Safari4+ */
+  color: -webkit-linear-gradient(top,  #ffa84c 0%,#ff7b0d 100%); /* Chrome10+,Safari5.1+ */
+  color: -o-linear-gradient(top,  #ffa84c 0%,#ff7b0d 100%); /* Opera 11.10+ */
+  color: -ms-linear-gradient(top,  #ffa84c 0%,#ff7b0d 100%); /* IE10+ */
+  color: linear-gradient(to bottom,  #ffa84c 0%,#ff7b0d 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffa84c', endColorstr='#ff7b0d',GradientType=0 ); /* IE6-9 */
 }
 
 .player .song-info {

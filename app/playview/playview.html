@@ -18,7 +18,7 @@
             <div id="progress-bar"><span id="progress"></span></div>
             <div class="options">
                 <i class="fa fa-thumbs-down fa-flip-horizontal fa-2x" ng-click="skipSong()"></i>
-                <i class="fa fa-thumbs-up fa-2x"></i>
+                <i id="thumbsUp" class="fa fa-thumbs-up fa-2x" ng-click="thumbsUp(trackName, trackId)"></i>
                 <i ng-click="play()" ng-class="{'fa fa-play fa-2x': !playing, 'fa fa-pause fa-2x': playing}"></i>
                 <i class="fa fa-forward fa-2x" ng-click="skipSong()"></i>
             </div>
@@ -35,9 +35,15 @@
             <a href="https://www.github.com/neill/soundora"><img src="assets/github.png" class="github"></a>
         </div>
     </div>
-    <div class="playlist"><h1>Welcome to Soundora</h1>
-        <p>Find new music through Soundcloud! Use the search bar above to find an artist on Soundcloud and create your station, leave Soundora running in the background, and enjoy! As tracks finish, you will find them listed here.</p>
-        <p>Soundora is built using the Soundcloud API and AngularJS. Feel free to add a pull request with new features to the GitHub repo, or e-mail me at <a href="mailto:neillnsilva@gmail.com">neillnsilva@gmail.com</a> with any comments.</p>
-        <ul><li ng-repeat="result in results | filter:search"></li></ul>
+    <div id="playlist-div" class="playlist playlist-bg">
+        <div id="blur-bg" class="background"></div>
+        <div id="welcome">
+            <h1>Welcome to Soundora</h1>
+            <p>Find new music through Soundcloud! Use the search bar above to find an artist on Soundcloud and create your station, leave Soundora running in the background, and enjoy! As tracks finish, you will find them listed here.</p>
+            <p>Soundora is built using the Soundcloud API and AngularJS. Feel free to add a pull request with new features to the GitHub repo, or e-mail me at <a href="mailto:neillnsilva@gmail.com">neillnsilva@gmail.com</a> with any comments.</p>
+        </div>
+        <div id="played-tracks">
+        </div>
+        <br style="clear: left;" />
     </div>
 </section>

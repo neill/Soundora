@@ -3,26 +3,31 @@
     <div class="block name">Hey, {{name}}</div>
     <div class="block search-block">
         <span class="icon"><i class="fa fa-search"></i></span>
-        <input type="search" id="search" placeholder="Search Soundcloud artists..." name="search" ng-change="refresh()" ng-model="searchQuery">
+        <input type="search" id="search" placeholder="Search Soundcloud artists..." name="search" ng-change="refresh()" ng-model="searchQuery" ng-focus="showRes()">
     </div>
-            <ul class="results" ng-hide="!searchQuery.length"><li ng-repeat="result in results">{{result.username}}</li></ul>
+            <ul class="results" id="results-id" ng-hide="!searchQuery.length"><li ng-repeat="result in results" ng-click="setStation(result.id, clientId)"><img class="results-avatar" src="{{result.avatar_url}}"></img> {{result.username}}</li></ul>
     <div class="block" id="disconnect"><img src="assets/btn-disconnect.png" ng-click="disconnect()"></div>
 </section>
 <section class="main">
     <div class="player">
-        <img src="{{artwork}}" class="album-art"><br>
-        <div id="progress-bar"><span id="progress"></span></div>
-        <div class="options">
-            <i class="fa fa-thumbs-down fa-flip-horizontal fa-2x"></i>
-            <i class="fa fa-thumbs-up fa-2x"></i>
-            <i ng-click="play()" ng-class="{'fa fa-play fa-2x': !playing, 'fa fa-pause fa-2x': playing}"></i>
-            <i class="fa fa-forward fa-2x" ng-click="skipSong()"></i>
+        <div class="getstarted" id="getstarted-id">
+            <i class="fa fa-spinner fa-pulse fa-3x fa-fw margin-bottom"></i>
         </div>
-        <div class="song-info">
-            <ul>
-                <li id="track-name"><h3>{{trackName}}</h3></li>
-                <li id="track-artist">by {{artist}}</li>
-            </ul>
+        <div class="fullplayer" id="fullplayer-id">
+            <img src="{{artwork}}" class="album-art"><br>
+            <div id="progress-bar"><span id="progress"></span></div>
+            <div class="options">
+                <i class="fa fa-thumbs-down fa-flip-horizontal fa-2x" ng-click="skipSong()"></i>
+                <i class="fa fa-thumbs-up fa-2x"></i>
+                <i ng-click="play()" ng-class="{'fa fa-play fa-2x': !playing, 'fa fa-pause fa-2x': playing}"></i>
+                <i class="fa fa-forward fa-2x" ng-click="skipSong()"></i>
+            </div>
+            <div class="song-info">
+                <ul>
+                    <li id="track-name"><h3>{{trackName}}</h3></li>
+                    <li id="track-artist">by {{artist}}</li>
+                </ul>
+            </div>
         </div>
 
         <div class="foot">

@@ -14,6 +14,7 @@ angular.module('myApp.playview', ['ngRoute'])
   // Initialize app with data.
   var accessToken = $cookies.soundoraCookie;
   var clientId = '8a810189684f0d6deeac1e75cbeabed6';
+  $scope.clientId = '8a810189684f0d6deeac1e75cbeabed6';
 
   console.log(accessToken);
 
@@ -52,6 +53,11 @@ angular.module('myApp.playview', ['ngRoute'])
   // Search for users. Thanks to (http://blog.itcrowd.pl/2014/04/queueing-service-for-angularjs.html) for asyncQueue.js!
   $scope.results = [];
 
+  // jQuery hide() animates width. We don't want this so I'm using pure JavaScript.
+  $scope.showRes = function() {
+    document.getElementById("results-id").style.visibility = "visible";
+  }
+
   function doRefresh() {
     return $http.get('https://api.soundcloud.com/users.json?client_id=' + clientId + '&q=' + $scope.searchQuery)
     .then(function(data) {
@@ -79,6 +85,8 @@ angular.module('myApp.playview', ['ngRoute'])
   var getTrack = function(trackUrl, clientId) {
     userService.getTrack(trackUrl, clientId)
     .then(function(data) {
+      console.log(data.genre);
+      generateNext($scope.genre, clientId);
       $scope.playing = true;
       $scope.trackUrl = data.uri;
       $scope.trackId = data.id;
@@ -95,13 +103,46 @@ angular.module('myApp.playview', ['ngRoute'])
       $scope.song.autoplay = true;
       $scope.song.addEventListener('timeupdate', updateProgress, false);
       $scope.song.addEventListener('ended', function() { getTrack($scope.nextSong.uri, clientId); });
-      console.log("Now playing " + data.title);
+      console.log("Now playing " + $scope.trackName);
+      generateNext($scope.genre, clientId);
       $scope.song.addEventListener("load", function() { $scope.song.play(); }, true);
     }, function(error) {
       console.log("Error getting track.");
     });
   };
 
+  var setTrack = function(userId, clientId) {
+    if ($scope.playing) {
+      $scope.song.pause();
+      $scope.playing = !$scope.playing;
+    };
+    userService.setTrack(userId, clientId)
+    .then(function(data) {
+      $scope.playing = true;
+      $scope.trackUrl = data[0].uri;
+      $scope.trackId = data[0].id;
+      $scope.genre = data[0].genre;
+      $scope.trackShareUrl = data[0].permalink_url;
+      $scope.trackName = data[0].title;
+      $scope.artist = data[0].user.username;
+      $scope.artistUrl = data[0].user.permalink_url;
+      $scope.artwork = data[0].artwork_url.replace("large", "t500x500");
+      $scope.wave = data[0].waveform_url;
+      $scope.stream = data[0].stream_url + '?client_id=' + clientId;
+      $scope.song = new Audio();
+      $scope.song.src = $scope.stream;
+      $scope.song.autoplay = true;
+      $scope.song.addEventListener('timeupdate', updateProgress, false);
+      $scope.song.addEventListener('ended', function() { getTrack($scope.nextSong.uri, clientId); });
+      console.log("Now playing " + $scope.trackName);
+      generateNext($scope.genre, clientId);
+      $scope.song.addEventListener("load", function() { $scope.song.play(); }, true);
+    }, function(error) {
+      console.log("Error getting track.");
+    });
+  };
+
+  // Generate next track to play.
   var generateNext = function(genre, clientId) {
     userService.generateNext(genre, clientId)
     .then(function(data) {
@@ -113,6 +154,7 @@ angular.module('myApp.playview', ['ngRoute'])
     });
   };
 
+  // Song progress-bar.
   function updateProgress() {
     var progress = document.getElementById("progress");
     var value = 0;
@@ -122,20 +164,21 @@ angular.module('myApp.playview', ['ngRoute'])
     progress.style.width = value + "%";
   }
 
-  // setTimeout(function() {
-  //     $scope.song.src = $scope.stream;
-  //     $scope.song.play();
-  //     $scope.playing = true;
-  //     console.log("Song loaded... Play!");
-  // }, 1000);
-
+  // Skip to next song.
   $scope.skipSong = function() {
     if ($scope.playing) {
       $scope.song.pause();
       $scope.playing = !$scope.playing;
     }
     generateNext($scope.genre, clientId);
-    getTrack($scope.nextSong.uri, clientId);
+    setTimeout(function() { getTrack($scope.nextSong.uri, clientId); }, 500);
+  };
+
+  $scope.setStation = function(userId, clientId) {
+    $("#getstarted-id").hide();
+    document.getElementById("results-id").style.visibility = "hidden";
+    document.getElementById("fullplayer-id").style.visibility = "visible";
+    setTrack(userId, clientId);
   };
 
   function thumbsUp() {
@@ -147,6 +190,5 @@ angular.module('myApp.playview', ['ngRoute'])
   }
 
   getUser(accessToken);
-  generateNext($scope.genre, clientId);
-  getTrack('http://api.soundcloud.com/tracks/190984415', clientId);
+  // getTrack('http://api.soundcloud.com/tracks/190984415', clientId);
 }]);

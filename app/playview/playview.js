@@ -67,7 +67,7 @@ angular.module('myApp.playview', ['ngRoute'])
   };
 
   $scope.refresh = function () {
-    AsyncQueue.add(doRefresh, {timeout: 1000});
+    AsyncQueue.add(doRefresh, {timeout: 500});
   };
 
   // Get User from userService
@@ -170,6 +170,8 @@ angular.module('myApp.playview', ['ngRoute'])
 
   // Add past-played track to the page with some info.
   function addPastTrack(image, trackname, artistname) {
+    $("#thumbsUp").removeClass("liked");
+    document.getElementById("welcome").style.display = "none";
     var mainDiv = document.getElementById('played-tracks');
     var newDiv = document.createElement("div");
     newDiv.setAttribute('class', 'past-track');

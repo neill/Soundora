@@ -230,10 +230,6 @@ html, body {
   filter: blur(10px);
 }
 
-#welcome {
-  display: none;
-}
-
 #played-tracks {
   width: 100%;
 }

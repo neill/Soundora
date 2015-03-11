@@ -1,49 +1,52 @@
-<section class="menu">
-    <div class="block"><img src="{{user_img}}" class="usr_img"/></div>
-    <div class="block name">Hey, {{name}}</div>
-    <div class="block search-block">
-        <span class="icon"><i class="fa fa-search"></i></span>
-        <input type="search" id="search" placeholder="Search Soundcloud artists..." name="search" ng-change="refresh()" ng-model="searchQuery" ng-focus="showRes()">
-    </div>
-            <ul class="results" id="results-id" ng-hide="!searchQuery.length"><li ng-repeat="result in results" ng-click="setStation(result.id, clientId)"><img class="results-avatar" src="{{result.avatar_url}}"></img> {{result.username}}</li></ul>
-    <div class="block" id="disconnect"><img src="assets/btn-disconnect.png" ng-click="disconnect()"></div>
-</section>
 <section class="main">
-    <div class="player">
-        <div class="getstarted" id="getstarted-id">
-            <i class="fa fa-spinner fa-pulse fa-3x fa-fw margin-bottom"></i>
+    <div class="menu">
+        <div class="block"><img src="{{user_img}}" class="usr_img"/></div>
+        <div class="block name">Hey, {{name}}</div>
+        <div class="search-block">
+            <span class="icon"><i class="fa fa-search"></i></span>
+            <input type="search" id="search" placeholder="Search Soundcloud artists..." name="search" ng-change="refresh()" ng-model="searchQuery" ng-focus="showRes()">
         </div>
-        <div class="fullplayer" id="fullplayer-id">
-            <img src="{{artwork}}" class="album-art"><br>
-            <div id="progress-bar"><span id="progress"></span></div>
-            <div class="options">
-                <i class="fa fa-thumbs-down fa-flip-horizontal fa-2x" ng-click="skipSong()"></i>
-                <i id="thumbsUp" class="fa fa-thumbs-up fa-2x" ng-click="thumbsUp(trackName, trackId)"></i>
-                <i ng-click="play()" ng-class="{'fa fa-play fa-2x': !playing, 'fa fa-pause fa-2x': playing}"></i>
-                <i class="fa fa-forward fa-2x" ng-click="skipSong()"></i>
+            <ul class="results" id="results-id" ng-hide="!searchQuery.length"><li ng-repeat="result in results | limitTo:25" ng-click="setStation(result.id, clientId)"><img class="results-avatar" src="{{result.avatar_url}}"></img> {{result.username}}</li></ul>
+        <div class="block" id="disconnect"><img src="assets/btn-disconnect.png" ng-click="disconnect()"></div><div style='clear:both'></div>
+    </div>
+    <div class="player-wrap">
+        <div class="player">
+            <div class="getstarted" id="getstarted-id">
+                <i class="fa fa-spinner fa-pulse fa-3x fa-fw margin-bottom"></i>
             </div>
-            <div class="song-info">
-                <ul>
-                    <li id="track-name"><h3>{{trackName}}</h3></li>
-                    <li id="track-artist">by {{artist}}</li>
-                </ul>
+            <div class="fullplayer" id="fullplayer-id">
+                <img src="{{artwork}}" class="album-art"><br>
+                <div id="progress-bar"><span id="progress"></span></div>
+                <div class="options">
+                    <i class="fa fa-thumbs-down fa-flip-horizontal fa-2x" ng-click="skipSong()"></i>
+                    <i id="thumbsUp" class="fa fa-thumbs-up fa-2x" ng-click="thumbsUp(trackName, trackId)"></i>
+                    <i ng-click="play()" ng-class="{'fa fa-play fa-2x': !playing, 'fa fa-pause fa-2x': playing}"></i>
+                    <i class="fa fa-forward fa-2x" ng-click="skipSong()"></i>
+                </div>
+                <div class="song-info">
+                    <ul>
+                        <li id="track-name"><h3>{{trackName}}</h3></li>
+                        <li id="track-artist">by {{artist}}</li>
+                    </ul>
+                </div>
             </div>
-        </div>
-
-        <div class="foot">
-            <a href="http://soundcloud.com"><img src="assets/powered-by.png" class="footimg"></a>
-            <a href="https://www.github.com/neill/soundora"><img src="assets/github.png" class="github"></a>
         </div>
     </div>
-    <div id="playlist-div" class="playlist playlist-bg">
-        <div id="blur-bg" class="background"></div>
-        <div id="welcome">
-            <h1>Welcome to Soundora</h1>
-            <p>Find new music through Soundcloud! Use the search bar above to find an artist on Soundcloud and create your station, leave Soundora running in the background, and enjoy! As tracks finish, you will find them listed here.</p>
-            <p>Soundora is built using the Soundcloud API and AngularJS. Feel free to add a pull request with new features to the GitHub repo, or e-mail me at <a href="mailto:neillnsilva@gmail.com">neillnsilva@gmail.com</a> with any comments.</p>
+    <div class="playlist-wrap">
+        <div id="playlist-div" class="playlist playlist-bg">
+            <div id="blur-bg" class="background"></div>
+            <div id="welcome">
+                <h1>Welcome to Soundora</h1>
+                <p>Find new music through Soundcloud! Use the search bar above to find an artist on Soundcloud and create your station, leave Soundora running in the background, and enjoy! As tracks finish, you will find them listed here.</p>
+                <p>Soundora is built using the Soundcloud API and AngularJS. Feel free to add a pull request with new features to the GitHub repo, or e-mail me at <a href="mailto:neillnsilva@gmail.com">neillnsilva@gmail.com</a> with any comments.</p>
+            </div>
+            <div id="played-tracks">
+            </div>
+            <br style="clear: left;" />
         </div>
-        <div id="played-tracks">
-        </div>
-        <br style="clear: left;" />
+    </div>
+    <div class="foot">
+        <a href="http://soundcloud.com"><img src="assets/powered-by.png" class="footimg"></a>
+        <a href="https://www.github.com/neill/soundora"><img src="assets/github.png" class="github"></a>
     </div>
 </section>

@@ -56,15 +56,15 @@ angular.module('myApp.playview', ['ngRoute'])
   // jQuery hide() animates width. We don't want this so I'm using pure JavaScript.
   $scope.showRes = function() {
     document.getElementById("results-id").style.visibility = "visible";
-  }
+  };
 
   function doRefresh() {
     return $http.get('https://api.soundcloud.com/users.json?client_id=' + clientId + '&q=' + $scope.searchQuery)
     .then(function(data) {
       $scope.results = data.data;
-      console.log($scope.results)
+      console.log($scope.results);
     });
-  };
+  }
 
   $scope.refresh = function () {
     AsyncQueue.add(doRefresh, {timeout: 500});
@@ -117,7 +117,7 @@ angular.module('myApp.playview', ['ngRoute'])
     if ($scope.playing) {
       $scope.song.pause();
       $scope.playing = !$scope.playing;
-    };
+    }
     userService.setTrack(userId, clientId)
     .then(function(data) {
       $scope.playing = true;
@@ -151,8 +151,8 @@ angular.module('myApp.playview', ['ngRoute'])
     userService.generateNext(genre, clientId)
     .then(function(data) {
       $scope.nextSong = data[Math.floor(Math.random()*data.length)];
-      console.log($scope.nextSong.title + " is playing NEXT!")
-      console.log("Next song's genre is: " + $scope.nextSong.genre)
+      console.log($scope.nextSong.title + " is playing NEXT!");
+      console.log("Next song's genre is: " + $scope.nextSong.genre);
     }, function(error) {
       console.log("Error generating next track.");
     });
@@ -179,7 +179,6 @@ angular.module('myApp.playview', ['ngRoute'])
     $('#played-tracks').prepend(newDiv);
   }
 
-
   // Skip to next song.
   $scope.skipSong = function() {
     if ($scope.playing) {
@@ -203,7 +202,7 @@ angular.module('myApp.playview', ['ngRoute'])
     console.log("Liked " + trackName + " (" + trackId + ").");
     $("#thumbsUp").addClass("liked");
     SC.put('/me/favorites/' + trackId);
-  }
+  };
 
   function thumbsDown() {
     // For a later date... Where would we store and check this?

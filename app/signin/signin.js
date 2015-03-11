@@ -19,9 +19,9 @@ angular.module('myApp.signin', ['ngRoute'])
         // initiate auth popup
         SC.connect(function() {
           var accessToken = SC.accessToken();
-          $cookies['soundoraCookie'] = accessToken
+          $cookies.soundoraCookie = accessToken;
           // $cookieStore.put('soundoraCookie', accessToken);
           $scope.$apply(function() { $location.path("/play"); });
         });
-    }
+    };
 }]);

@@ -16,8 +16,6 @@ angular.module('myApp.playview', ['ngRoute'])
   var clientId = '8a810189684f0d6deeac1e75cbeabed6';
   $scope.clientId = '8a810189684f0d6deeac1e75cbeabed6';
 
-  console.log(accessToken);
-
   // Basic check if user logged in. If not, send to sign-in page.
   if (accessToken === null) {
     $location.path("/sign-in");
@@ -85,8 +83,6 @@ angular.module('myApp.playview', ['ngRoute'])
   var getTrack = function(trackUrl, clientId) {
     userService.getTrack(trackUrl, clientId)
     .then(function(data) {
-      console.log(data.genre);
-      generateNext($scope.genre, clientId);
       $scope.playing = true;
       $scope.trackUrl = data.uri;
       $scope.trackId = data.id;
@@ -95,21 +91,27 @@ angular.module('myApp.playview', ['ngRoute'])
       $scope.trackName = data.title;
       $scope.artist = data.user.username;
       $scope.artistUrl = data.user.permalink_url;
-      $scope.artwork = data.artwork_url.replace("large", "t500x500");
+      if (data.artwork_url === null) {
+        $scope.artwork = data.user.avatar_url;
+      } else {
+        $scope.artwork = data.artwork_url.replace("large", "t500x500");
+      }
       $scope.wave = data.waveform_url;
       $scope.stream = data.stream_url + '?client_id=' + clientId;
       $scope.song = new Audio();
       $scope.song.src = $scope.stream;
       $scope.song.autoplay = true;
       $scope.song.addEventListener('timeupdate', updateProgress, false);
-      $scope.song.addEventListener('ended', function() { addPastTrack($scope.artwork, $scope.trackName, $scope.artist); });
-      $scope.song.addEventListener('ended', function() { getTrack($scope.nextSong.uri, clientId); });
       console.log("Now playing " + $scope.trackName);
       generateNext($scope.genre, clientId);
+      $scope.song.addEventListener('ended', function() { addPastTrack($scope.artwork, $scope.trackName, $scope.artist); });
+      $scope.song.addEventListener('ended', function() { getTrack($scope.nextSong.uri, clientId); });
       $scope.song.addEventListener("load", function() { $scope.song.play(); }, true);
       document.getElementById("blur-bg").style.backgroundImage = "url(" + $scope.artwork + ")";
     }, function(error) {
       console.log("Error getting track.");
+      generateNext($scope.genre, clientId);
+      getTrack($scope.nextSong.uri, clientId);
     });
   };
 
@@ -120,17 +122,22 @@ angular.module('myApp.playview', ['ngRoute'])
     }
     userService.setTrack(userId, clientId)
     .then(function(data) {
+      var x = Math.floor(Math.random()*data.length);
       $scope.playing = true;
-      $scope.trackUrl = data[0].uri;
-      $scope.trackId = data[0].id;
-      $scope.genre = data[0].genre;
-      $scope.trackShareUrl = data[0].permalink_url;
-      $scope.trackName = data[0].title;
-      $scope.artist = data[0].user.username;
-      $scope.artistUrl = data[0].user.permalink_url;
-      $scope.artwork = data[0].artwork_url.replace("large", "t500x500");
-      $scope.wave = data[0].waveform_url;
-      $scope.stream = data[0].stream_url + '?client_id=' + clientId;
+      $scope.trackUrl = data[x].uri;
+      $scope.trackId = data[x].id;
+      $scope.genre = data[x].genre;
+      $scope.trackShareUrl = data[x].permalink_url;
+      $scope.trackName = data[x].title;
+      $scope.artist = data[x].user.username;
+      $scope.artistUrl = data[x].user.permalink_url;
+      if (data[x].artwork_url === null) {
+        $scope.artwork = data[x].user.avatar_url;
+      } else {
+        $scope.artwork = data[x].artwork_url.replace("large", "t500x500");
+      }
+      $scope.wave = data[x].waveform_url;
+      $scope.stream = data[x].stream_url + '?client_id=' + clientId;
       $scope.song = new Audio();
       $scope.song.src = $scope.stream;
       $scope.song.autoplay = true;
@@ -192,6 +199,7 @@ angular.module('myApp.playview', ['ngRoute'])
 
   $scope.setStation = function(userId, clientId) {
     $("#getstarted-id").hide();
+    document.getElementById("player-id").style.visibility = "visible";
     document.getElementById("results-id").style.visibility = "hidden";
     document.getElementById("fullplayer-id").style.visibility = "visible";
     setTrack(userId, clientId);

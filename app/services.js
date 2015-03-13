@@ -31,7 +31,7 @@ angular.module('myApp.services', [])
 
             setTrack: function(userId, clientId){
                 // return $http.get('https://api.soundcloud.com/users/' + userId + '/tracks.json?client_id=' + clientId + '&order=latest&limit=1')
-                return $http.get('https://api.soundcloud.com/users/' + userId + '/tracks.json?client_id=' + clientId + '&order=latest&limit=1')
+                return $http.get('https://api.soundcloud.com/users/' + userId + '/tracks.json?client_id=' + clientId + '&order=latest&limit=20')
                 .then(function(response) {
                     if (typeof response.data === 'object') {
                         return response.data;

@@ -173,6 +173,26 @@ angular.module('myApp.playview', ['ngRoute'])
       value = Math.floor((100 / $scope.song.duration) * $scope.song.currentTime);
     }
     progress.style.width = value + "%";
+
+    var currTimeDiv = document.getElementById("current-time");
+    var totalTimeDiv = document.getElementById("total-time");
+    var currTime = Math.floor(this.currentTime).toString();
+    var totalTime = Math.floor(this.duration).toString();
+
+    currTimeDiv.innerHTML = formatSecondsAsTime(currTime);
+    totalTimeDiv.innerHTML = formatSecondsAsTime(totalTime);
+  }
+
+  function formatSecondsAsTime(secs) {
+    var hr  = Math.floor(secs / 3600);
+    var min = Math.floor((secs - (hr * 3600))/60);
+    var sec = Math.floor(secs - (hr * 3600) - (min * 60));
+
+    if (sec < 10) {
+      sec = "0" + sec;
+    }
+
+    return min + ':' + sec;
   }
 
   // Add past-played track to the page with some info.

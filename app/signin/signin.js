@@ -13,7 +13,7 @@ angular.module('myApp.signin', ['ngRoute'])
     $scope.connect = function() {
         SC.initialize({
           client_id: '8a810189684f0d6deeac1e75cbeabed6',
-          redirect_uri: 'http://localhost:8000/app/callback.html'
+          redirect_uri: 'http://localhost:8000/app/callback.html',
         });
 
         // initiate auth popup

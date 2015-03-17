@@ -480,6 +480,10 @@ html, body {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffa84c', endColorstr='#ff7b0d',GradientType=0 ); /* IE6-9 */
 }
 
+#track-time {
+  padding-top: 2px;
+}
+
 #current-time {
   float: left;
   font-size: small;
@@ -490,6 +494,15 @@ html, body {
   float: right;
   font-size: small;
   padding-right: 4px;
+}
+
+#volume {
+  margin: 0 auto;
+  width: 50%;
+}
+
+#volume-slider {
+  padding-top: 1px;
 }
 
 .player .song-info {

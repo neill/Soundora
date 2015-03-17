@@ -100,6 +100,7 @@ angular.module('myApp.playview', ['ngRoute'])
       $scope.stream = data.stream_url + '?client_id=' + clientId;
       $scope.song = new Audio();
       $scope.song.src = $scope.stream;
+      $scope.song.volume = document.getElementById('volume-slider').value;
       $scope.song.autoplay = true;
       $scope.song.addEventListener('timeupdate', updateProgress, false);
       console.log("Now playing " + $scope.trackName);
@@ -140,6 +141,7 @@ angular.module('myApp.playview', ['ngRoute'])
       $scope.stream = data[x].stream_url + '?client_id=' + clientId;
       $scope.song = new Audio();
       $scope.song.src = $scope.stream;
+      $scope.song.volume = document.getElementById('volume-slider').value;
       $scope.song.autoplay = true;
       $scope.song.addEventListener('timeupdate', updateProgress, false);
       $scope.song.addEventListener('ended', function() { addPastTrack($scope.artwork, $scope.trackName, $scope.artist); });
@@ -193,6 +195,11 @@ angular.module('myApp.playview', ['ngRoute'])
     }
 
     return min + ':' + sec;
+  }
+
+  $scope.updateVolume = function() {
+    var vol = document.getElementById('volume-slider').value;
+    $scope.song.volume = vol;
   }
 
   // Add past-played track to the page with some info.

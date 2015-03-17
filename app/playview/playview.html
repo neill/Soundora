@@ -16,8 +16,12 @@
             </div>
             <div class="fullplayer" id="fullplayer-id">
                 <img src="{{artwork}}" class="album-art"><br>
-                <div id="progress-bar"><span id="progress"></span></div>
-                <div id="track-time"><span id="current-time">0:00</span><span id="total-time">0:00</span></div>
+                <div id="progress-bar">
+                    <span id="progress"></span>
+                </div>
+                <div id="track-time">
+                    <span id="current-time">0:00</span><span id="total-time">0:00</span><div id="volume"><input ng-model="songTime" type=range min=0 max=1 value=0.5 id="volume-slider" step=0.1 ng-change="updateVolume()"></div><div style="clear: both;"></div>
+                </div>
                 <div class="options">
                     <i class="fa fa-thumbs-down fa-flip-horizontal fa-2x" ng-click="skipSong()"></i>
                     <i id="thumbsUp" class="fa fa-thumbs-up fa-2x" ng-click="thumbsUp(trackName, trackId)"></i>

@@ -9,12 +9,12 @@ angular.module('myApp.playview', ['ngRoute'])
   });
 }])
 
-.controller('PlayViewCtrl', ['$scope', '$cookies', '$http', '$location', 'userService', 'AsyncQueue', function($scope, $cookies, $http, $location, userService, AsyncQueue) {
+.controller('PlayViewCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$location', 'userService', 'AsyncQueue', function($scope, $rootScope, $cookies, $http, $location, userService, AsyncQueue) {
 
   // Initialize app with data.
   var accessToken = $cookies.soundoraCookie;
-  var clientId = '8a810189684f0d6deeac1e75cbeabed6';
-  $scope.clientId = '8a810189684f0d6deeac1e75cbeabed6';
+  var clientId = $rootScope.client_id;
+  $scope.clientId = $rootScope.client_id;
 
   // Basic check if user logged in. If not, send to sign-in page.
   if (accessToken === null) {
@@ -23,8 +23,8 @@ angular.module('myApp.playview', ['ngRoute'])
 
   SC.initialize({
     client_id: clientId,
-    client_secret: '4418d9cea79b0804f69fa817d434bf72',
-    redirect_uri: 'http://localhost:8000/app/callback.html',
+    client_secret: $rootScope.client_secret,
+    redirect_uri: $rootScope.redirect_uri,
     access_token: accessToken,
     scope: 'non-expiring'
   });

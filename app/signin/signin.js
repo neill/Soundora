@@ -9,11 +9,11 @@ angular.module('myApp.signin', ['ngRoute'])
   });
 }])
 
-.controller('SignInCtrl', ['$scope', '$cookies', '$cookieStore', '$location', function($scope, $cookies, $cookieStore, $location) {
+.controller('SignInCtrl', ['$scope', '$rootScope', '$cookies', '$cookieStore', '$location', function($scope, $rootScope, $cookies, $cookieStore, $location) {
     $scope.connect = function() {
         SC.initialize({
-          client_id: '8a810189684f0d6deeac1e75cbeabed6',
-          redirect_uri: 'http://localhost:8000/app/callback.html',
+          client_id: $rootScope.client_id,
+          redirect_uri: $rootScope.redirect_uri,
         });
 
         // initiate auth popup
